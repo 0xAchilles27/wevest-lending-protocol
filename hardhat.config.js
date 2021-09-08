@@ -18,7 +18,7 @@ try {
 
 module.exports = {
   solidity: {
-    version: '0.8.3',
+    version: '0.8.4',
     settings: {
       optimizer: {
         enabled: true,
@@ -41,9 +41,7 @@ module.exports = {
       from: secret.account,
       accounts: {
         mnemonic: secret.mnemonic
-      },
-      gas: 'auto',
-      gasPrice: 84.0000001e9
+      }
     },
     hardhat: {
       forking: {

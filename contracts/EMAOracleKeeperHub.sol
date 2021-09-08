@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-v3-or-later
-pragma solidity 0.8.3;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
@@ -44,9 +44,9 @@ contract EMAOracleKeeperHub is IKeeperCompatible, Ownable {
     }
 
     /**
-        IKeeperCompatible override
+        @inheritdoc IKeeperCompatible
      */
-    function checkUpkeep(bytes calldata checkData)
+    function checkUpkeep(bytes calldata /*checkData*/)
         external
         override
         useDynamicArray
@@ -57,9 +57,7 @@ contract EMAOracleKeeperHub is IKeeperCompatible, Ownable {
             IEMAOracle oracle = IEMAOracle(_oracles.at(i));
             (bool updated, ) = oracle.updateAndQuery();
             if (updated) {
-                if (!upkeepNeeded) {
-                    upkeepNeeded = true;
-                }
+                upkeepNeeded = true;
 
                 oraclesToUpdate.push(address(oracle));
             }
@@ -69,6 +67,9 @@ contract EMAOracleKeeperHub is IKeeperCompatible, Ownable {
         }
     }
 
+    /**
+        @inheritdoc IKeeperCompatible
+     */
     function performUpkeep(bytes calldata performData) external override {
         address[] memory oraclesToUpdate = abi.decode(performData, (address[]));
         for (uint256 i = 0; i < oraclesToUpdate.length; i++) {
